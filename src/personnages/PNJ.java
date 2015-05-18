@@ -13,8 +13,6 @@ public class PNJ extends Personnage{
 		
 	public PNJ(){
 		super();
-		new Constante();
-		
 	}
 	
 	/**
@@ -45,7 +43,7 @@ public class PNJ extends Personnage{
 					nom[i] = generationLettre(4); //80% consonnes
 				}
 				else if(Constante.mapContient(Constante.voyelles,nom[i-1]) && Constante.mapContient(Constante.voyelles,nom[i-2])){
-					nom[i] = generationLettre(9); //80% consonnes
+					nom[i] = generationLettre(9); //90% consonnes
 				}
 				else{
 					nom[i] = generationLettre(0);
@@ -115,6 +113,7 @@ public class PNJ extends Personnage{
 	}
 	
 	public static void main(String[] args){
+		new Constante();
 		PNJ a = new PNJ();
 		a.generationNom();
 		System.out.println(a);
