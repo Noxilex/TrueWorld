@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Random;
+import java.lang.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,27 +17,82 @@ import javax.swing.JPanel;
 public class Monde extends JPanel{
 	
 	int taille = 1;
+
 	Case[][] newMonde;
+	//monde qui sert à la fonction continent pour générer les nouveaux volcans autour des premiers
+	Case[][] mondeTmp;
 	Case[][] monde;
 	JPanel map;
+	String type;
 	
-	public Monde(int hauteur,  int largeur){
+	public Monde(int hauteur,  int largeur, String type){
+		this.type = type;
 		map = new JPanel();
-		monde = new Case[hauteur][largeur];
-		initUI(monde, hauteur, largeur, false);
+		
+
+		//Génération d'un monde plein d'eau (vide)
 		newMonde = new Case[hauteur][largeur];
-		initUI(newMonde, hauteur, largeur, true);
-		erruption();
+			swamp(newMonde, hauteur, largeur, true);	
+		
+		//Génération des volcans
+		monde = new Case[hauteur][largeur];
+		if(this.type == "swamp"){
+			swamp(monde, hauteur, largeur, false);
+			//Fusion des volcans
+			erruption(monde, newMonde);
+		}
+			
+		if(this.type == "continent"){
+			mondeTmp = new Case[hauteur][largeur];
+			swamp(mondeTmp, hauteur, largeur, true);
+			continent(monde, hauteur, largeur);
+			//Fusion des volcans
+			erruption(mondeTmp, newMonde);
+		}		
+
+		
+		//Adoucissement du paysage
 		miseAJour();
 		miseAJour();
 		miseAJour();
 		miseAJour();
 		miseAJour();
+		
 		setPreferredSize(new Dimension(taille*hauteur*2, taille*largeur));
 	}
 	
+	/**
+	 * Transforme le monde passé en paramètre en un continent
+	 * @param tab
+	 * @param hauteur
+	 * @param largeur
+	 */
+	private void continent(Case[][] tab, int hauteur, int largeur) {
+		for(int h = 0; h < hauteur; h++){
+			for(int l = 0; l < largeur; l++){
+				tab[h][l] = new Case(20);
+			}
+		}
+		for(int h = 0; h < tab.length; h++){
+			for(int l = 0; l < tab[0].length; l++){
+				for(int caseY = -10; caseY < 10; caseY++){
+					for(int caseX = -10; caseX < 10; caseX++){
+						try{
+							if(tab[h+caseY][l+caseX].getType() == "terre"){
+								int res = Math.abs(caseY)+Math.abs(caseX);
+								mondeTmp[h][l] = new Case((10-res)*1000);
+							}
+						}catch(Exception e){
+							
+						}
+					}
+				}
+			}
+		}
+	}
 
-	public void initUI(Case[][] tab, int hauteur , int largeur, boolean eau){
+
+	public void swamp(Case[][] tab, int hauteur , int largeur, boolean eau){
 		if(eau){
 			for(int h = 0; h < hauteur; h++){
 				for(int l = 0; l < largeur; l++){
@@ -46,13 +102,17 @@ public class Monde extends JPanel{
 		}else{
 			for(int h = 0; h < hauteur; h++){
 				for(int l = 0; l < largeur; l++){
-					tab[h][l] = new Case(3);
+					tab[h][l] = new Case(200);
 				}
 			}
 		}
 	}
-	
-	public void erruption(){
+	/**
+	 * Transforme le monde d'origine en un nouveau monde où les volcan sont déjà rentrés en erruption
+	 * @param monde
+	 * @param newMonde
+	 */
+	public void erruption(Case[][] monde, Case[][] newMonde){
 		for (int l = 0; l < monde.length; l++) {
 			for (int h = 0; h < monde[0].length; h++) {
 				if(monde[h][l].getType() == "terre"){
@@ -208,8 +268,9 @@ public class Monde extends JPanel{
 	}
 	
 	public static void main(String[] args){
-		Monde m = new Monde(600,600);
-		JFrame f = new JFrame("Test");
+
+		Monde m = new Monde(600,600, "continent");
+		JFrame f = new JFrame("Monde");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.getContentPane().add(m);
 		f.pack();

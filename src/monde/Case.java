@@ -8,7 +8,7 @@ public class Case {
 	
 	public Case(int rand){
 		Random r = new Random();
-		int alea = r.nextInt(100)+1;
+		int alea = r.nextInt(10000);
 		if(alea < rand){
 				typeCase = "terre";
 		}else{
