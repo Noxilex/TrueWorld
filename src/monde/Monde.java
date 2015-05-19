@@ -3,6 +3,9 @@ package monde;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,9 +20,11 @@ import personnages.PNJ;
  * @author Noxilex
  *
  */
-public class Monde extends JPanel{
+public class Monde extends JPanel implements MouseMotionListener{
 	
-	int taille = 4;
+	int mx, my;
+	
+	int taille = 20;
 	int hauteur = 600/taille;
 	int largeur = 600/taille;
 	List listePNJ;
@@ -32,8 +37,10 @@ public class Monde extends JPanel{
 	String type;
 	
 	public Monde(String type){
+		addMouseMotionListener(this);
 		this.type = type;
 		listePNJ = new ArrayList<PNJ>();
+		System.out.println(listePNJ);
 		map = new JPanel();
 		
 
@@ -64,7 +71,7 @@ public class Monde extends JPanel{
 		miseAJour();
 		miseAJour();
 		
-		setPreferredSize(new Dimension(taille*hauteur*2, taille*largeur));
+		setPreferredSize(new Dimension(taille*hauteur, taille*largeur));
 	}
 	
 	/**
@@ -269,21 +276,8 @@ public class Monde extends JPanel{
 	
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
-		for (int h = 0; h < monde.length; h++) {
-			int cH = h*taille;
-			for (int l = 0; l < monde[0].length; l++) {
-				int cL = l*taille;
-				if(monde[h][l].getType() == "terre"){
-					g.setColor(Color.GREEN);
-					g.fillRect(cH,cL,taille,taille);
-				} else if(monde[h][l].getType() == "eau"){
-					g.setColor(Color.BLUE);
-					g.fillRect(cH,cL,taille,taille);
-				}
-			}
-		}
 		for (int h = 0; h < newMonde.length; h++) {
-			int cH = h*taille+newMonde.length*taille;
+			int cH = h*taille;
 			for (int l = 0; l < newMonde[0].length; l++) {
 				int cL = l*taille;
 				if(newMonde[h][l].isPersonnage()){
@@ -324,5 +318,22 @@ public class Monde extends JPanel{
 
 	public List getListePNJ() {
 		return listePNJ;
+	}
+	
+	public Case getCase(Case[][] m, int x, int y){
+		return m[y][x];
+	}
+
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		mx = (e.getX()%taille);
+		my = (e.getY()%taille);
+		if(getCase(newMonde, mx, my).getPerso() != null)
+		System.out.println(getCase(newMonde, mx, my).getPerso());
 	}
 }

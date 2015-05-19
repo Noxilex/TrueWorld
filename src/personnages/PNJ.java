@@ -115,10 +115,7 @@ public class PNJ extends Personnage{
 		return res;
 	}
 	
-	public static void main(String[] args){
-		new Constante();
-		PNJ a = new PNJ();
-		a.generationNom();
-		System.out.println(a);
+	public String toString(){
+		return super.nom;
 	}
 }
