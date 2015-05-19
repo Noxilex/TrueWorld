@@ -1,10 +1,24 @@
 package main;
 
+import javax.swing.JFrame;
+
+import monde.Monde;
+import personnages.PNJ;
+
 public class Main {
 	static int duree = 100;
 	static boolean bissextile;
 	
 	public static void main(String[] args){
+		Monde m = new Monde("continent");
+		JFrame f = new JFrame("Monde");
+		
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.getContentPane().add(m);
+		f.pack();
+		f.setLocationRelativeTo(null);
+		f.setVisible(true);
+
 		for(int annee = 1; annee < duree; annee++){
 			if(annee%4 == 0){
 				if(annee%100 == 0){
@@ -35,8 +49,10 @@ public class Main {
 				}
 				for(int jour = 1; jour <= jourMois; jour++){
 					try{
-						Thread.sleep(100);
+						Thread.sleep(1000);
 						System.out.println(jour + "/" + mois + "/" + annee);
+						m.spawnPNJ(new PNJ());
+						f.repaint();
 					}catch(Exception e){
 						System.out.println(e.getMessage());
 					}

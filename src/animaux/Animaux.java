@@ -1,5 +1,12 @@
 package animaux;
 
-public abstract class Animaux {
+import javax.swing.JPanel;
+
+/**
+ * 
+ * @author Noxilex
+ *
+ */
+public abstract class Animaux{
 
 }

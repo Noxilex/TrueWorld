@@ -6,19 +6,22 @@ import main.Constante;
 
 /**
  * 
- * @author noxilex
+ * @author Noxilex
  *
  */
 public class PNJ extends Personnage{
 		
+
 	public PNJ(){
-		super();
+		new Constante();
+		nom = generationNom();
 	}
 	
 	/**
-	 * 
+	 * Génère un nom aléatoire
+	 * @return
 	 */
-	public void generationNom(){	
+	public String generationNom(){	
 		Random alea = new Random();
 		int tailleNom = alea.nextInt(6)+4;
 		char[] nom = new char[tailleNom];
@@ -51,7 +54,7 @@ public class PNJ extends Personnage{
 			}
 		}
 		nom[0] = (char)(nom[0] + ('A'-'a'));
-		super.nom = tabToString(nom);
+		return tabToString(nom);
 	}
 		
 	/**

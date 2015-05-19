@@ -3,30 +3,37 @@ package monde;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.lang.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import personnages.PNJ;
+
 /**
  * 
- * @author noxilex
+ * @author Noxilex
  *
  */
 public class Monde extends JPanel{
 	
-	int taille = 1;
+	int taille = 4;
+	int hauteur = 600/taille;
+	int largeur = 600/taille;
+	List listePNJ;
 
 	Case[][] newMonde;
-	//monde qui sert à la fonction continent pour générer les nouveaux volcans autour des premiers
+	//mondeTmp qui sert à la fonction continent pour générer les nouveaux volcans autour des premiers
 	Case[][] mondeTmp;
 	Case[][] monde;
 	JPanel map;
 	String type;
 	
-	public Monde(int hauteur,  int largeur, String type){
+	public Monde(String type){
 		this.type = type;
+		listePNJ = new ArrayList<PNJ>();
 		map = new JPanel();
 		
 
@@ -52,7 +59,6 @@ public class Monde extends JPanel{
 
 		
 		//Adoucissement du paysage
-		miseAJour();
 		miseAJour();
 		miseAJour();
 		miseAJour();
@@ -214,19 +220,51 @@ public class Monde extends JPanel{
 				Random r = new Random();
 				if(terre>eau){
 					newMonde[h][l].setType("terre");
-					/*if(terre>18){
-						newMonde[h][l].setType("terre");
-					}else{
-						if(r.nextFloat()>(float)(terre/(terre+eau)))
-							newMonde[h][l].setType("terre");
-						else
-							newMonde[h][l].setType("eau");
-					}*/
 				}else{
 					newMonde[h][l].setType("eau");
 				}
 			}
 		}
+	}
+	
+	public void spawnPNJ(PNJ pnj){
+		
+		/*
+		 *	1.Parcourt la map
+		 *	2.Trouve de la terre
+		 *	3.Spawn un pnj
+		 *
+		 *	Probleme, on ne veut pas plusieurs PNJ
+		 *
+		 *	Sol1: Compter le nombre de cases vertes et
+		 *	Générer un nombre aléa qui compte le nombre de cases restantes avant le spawn
+		 *
+		 */
+		int caseVerte = 0;
+		for (int h = 0; h < newMonde.length; h++) {
+			for (int l = 0; l < newMonde[0].length; l++) {
+				if(newMonde[h][l].isTerre() && !newMonde[h][l].isPersonnage()){
+					caseVerte++;
+				}
+			}
+		}
+		
+		Random r = new Random();
+		int alea = r.nextInt(caseVerte);
+		while(caseVerte > 0){
+			for (int h = 0; h < newMonde.length; h++) {
+				for (int l = 0; l < newMonde[0].length; l++) {
+					if(newMonde[h][l].isTerre() && !newMonde[h][l].isPersonnage()){
+						if(alea == caseVerte){
+							newMonde[h][l].setPerso(pnj);
+							listePNJ.add(pnj);
+						}
+						caseVerte--;
+					}
+				}
+			}
+		}
+		
 	}
 	
 	public void paintComponent(Graphics g){
@@ -241,27 +279,26 @@ public class Monde extends JPanel{
 				} else if(monde[h][l].getType() == "eau"){
 					g.setColor(Color.BLUE);
 					g.fillRect(cH,cL,taille,taille);
-				}/*
-				g.setColor(Color.BLACK);
-				g.drawRect(cH, cL, taille, taille);
-				*/
+				}
 			}
 		}
 		for (int h = 0; h < newMonde.length; h++) {
 			int cH = h*taille+newMonde.length*taille;
 			for (int l = 0; l < newMonde[0].length; l++) {
 				int cL = l*taille;
-				if(newMonde[h][l].getType() == "terre"){
-					g.setColor(Color.GREEN);
-					g.fillRect(cH,cL,taille,taille);
-				} else if(newMonde[h][l].getType() == "eau"){
-					g.setColor(Color.BLUE);
-					g.fillRect(cH,cL,taille,taille);
+				if(newMonde[h][l].isPersonnage()){
+					g.setColor(Color.BLACK);
+					g.fillRect(cH, cL, taille, taille);
 				}
-				/*
-				g.setColor(Color.BLACK);
-				g.drawRect(cH, cL, taille, taille);
-				*/
+				else{
+					if(newMonde[h][l].isTerre()){
+						g.setColor(Color.GREEN);
+						g.fillRect(cH,cL,taille,taille);
+					} else if(newMonde[h][l].isEau()){
+						g.setColor(Color.BLUE);
+						g.fillRect(cH,cL,taille,taille);
+					}
+				}
 			}
 		}
 
@@ -269,11 +306,23 @@ public class Monde extends JPanel{
 	
 	public static void main(String[] args){
 
-		Monde m = new Monde(600,600, "continent");
+		Monde m = new Monde("continent");
 		JFrame f = new JFrame("Monde");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.getContentPane().add(m);
 		f.pack();
 		f.setVisible(true);
+		
+		m.spawnPNJ(new PNJ());
+		m.spawnPNJ(new PNJ());
+		m.spawnPNJ(new PNJ());
+		
+		f.repaint();
+		
+		System.out.println(m.getListePNJ());
+	}
+
+	public List getListePNJ() {
+		return listePNJ;
 	}
 }
