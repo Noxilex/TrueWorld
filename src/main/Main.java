@@ -2,12 +2,12 @@ package main;
 
 import javax.swing.JFrame;
 
-import monde.Monde;
 import personnages.PNJ;
 
 public class Main {
 	static int duree = 100;
 	static boolean bissextile;
+	static String date = "";
 	
 	public static void main(String[] args){
 		Monde m = new Monde("continent");
@@ -50,6 +50,7 @@ public class Main {
 				for(int jour = 1; jour <= jourMois; jour++){
 					try{
 						Thread.sleep(1000);
+						date = jour + "/" + mois + "/" + annee;
 						System.out.println(jour + "/" + mois + "/" + annee);
 						m.spawnPNJ(new PNJ());
 						f.repaint();

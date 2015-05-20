@@ -1,5 +1,6 @@
 package monde;
 
+import java.awt.Rectangle;
 import java.util.Random;
 
 import personnages.Personnage;
@@ -9,7 +10,7 @@ import personnages.Personnage;
  * @author Noxilex
  *
  */
-public class Case {
+public class Case extends Rectangle{
 	
 	/**
 	 * Personnage contenu dans la case
