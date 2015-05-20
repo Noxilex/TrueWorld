@@ -2,18 +2,17 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -308,6 +307,10 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		g.fillRect(largeur*taille, 0, this.getWidth()-largeur*taille, this.getHeight());
 		g.setColor(Color.BLACK);
 		g.drawRect(largeur*taille, 0, this.getWidth()-largeur*taille, this.getHeight());
+		
+		Font f = new Font("Dialog", Font.CENTER_BASELINE, 12);
+		g.setFont(f);
+		
 		g.drawString("Date:",largeur*taille+10, 20);
 		g.drawString(Main.date, largeur*taille+10, 40);
 		g.drawString("Nom du personnage:",largeur*taille+10, 100);
