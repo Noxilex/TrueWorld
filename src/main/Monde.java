@@ -4,12 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -21,7 +26,10 @@ import personnages.PNJ;
  * @author Noxilex
  *
  */
-public class Monde extends JPanel implements MouseMotionListener{
+public class Monde extends JPanel implements MouseMotionListener, ActionListener{
+
+	double multiplicateur = 1;
+	final double vitesseDeBase = 1000;
 	
 	int mx, my;
 	
@@ -37,13 +45,29 @@ public class Monde extends JPanel implements MouseMotionListener{
 	Case[][] monde;
 	JPanel map;
 	String type;
+	JButton riseVitesse;
+	JButton lowerVitesse;
+	
 	
 	public Monde(String type){
+		this.setLayout(null);
 		addMouseMotionListener(this);
 		this.type = type;
 		listePNJ = new ArrayList<PNJ>();
 		System.out.println(listePNJ);
 		map = new JPanel();
+
+		lowerVitesse = new JButton("-");
+		riseVitesse = new JButton("+");
+		
+		lowerVitesse.setBounds(largeur*taille+10, 220, 50, 30);
+		riseVitesse.setBounds(largeur*taille+70, 220, 50, 30);
+		
+		lowerVitesse.addActionListener(this);
+		riseVitesse.addActionListener(this);
+		
+		this.add(lowerVitesse);
+		this.add(riseVitesse);
 		
 
 		//Génération d'un monde plein d'eau (vide)
@@ -283,9 +307,13 @@ public class Monde extends JPanel implements MouseMotionListener{
 		g.setColor(Color.WHITE);
 		g.fillRect(largeur*taille, 0, this.getWidth()-largeur*taille, this.getHeight());
 		g.setColor(Color.BLACK);
-		g.drawString("Nom du personnage:",largeur*taille+10, 100);
+		g.drawRect(largeur*taille, 0, this.getWidth()-largeur*taille, this.getHeight());
 		g.drawString("Date:",largeur*taille+10, 20);
 		g.drawString(Main.date, largeur*taille+10, 40);
+		g.drawString("Nom du personnage:",largeur*taille+10, 100);
+		g.drawString("Vitesse actuelle:",largeur*taille+10, 180);
+		g.drawString("x"+1/multiplicateur,largeur*taille+10, 200);
+
 		
 		Rectangle souris = new Rectangle(mx, my, 1, 1);
 		for (int h = 0; h < newMonde.length; h++) {
@@ -355,5 +383,15 @@ public class Monde extends JPanel implements MouseMotionListener{
 		// TODO Auto-generated method stub
 		mx = e.getX();
 		my = e.getY();
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getActionCommand().toString() == "+" && multiplicateur > 0.125){
+			multiplicateur *= 0.5;
+		}else if(e.getActionCommand().toString() == "-" && multiplicateur < 8){
+			multiplicateur *= 2;
+		}
+		Main.vitesse = multiplicateur*vitesseDeBase;
 	}
 }
