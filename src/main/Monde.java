@@ -21,7 +21,7 @@ import monde.Case;
 import personnages.PNJ;
 
 /**
- * 
+ * Crée un Panel qui remplit l'ensemble de la frame et affiche le monde ainsi que son interface
  * @author Noxilex
  *
  */
@@ -47,7 +47,10 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	JButton riseVitesse;
 	JButton lowerVitesse;
 	
-	
+	/**
+	 * Génère un monde de type continent ou swamp en fonction du type passé en paramètre 
+	 * @param type
+	 */
 	public Monde(String type){
 		this.setLayout(null);
 		addMouseMotionListener(this);
@@ -91,10 +94,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 
 		
 		//Adoucissement du paysage
-		miseAJour();
-		miseAJour();
-		miseAJour();
-		miseAJour();
+		miseAJour(4);
 		
 		setPreferredSize(new Dimension(taille*hauteur+150, taille*largeur));
 	}
@@ -105,7 +105,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	 * @param hauteur
 	 * @param largeur
 	 */
-	private void continent(Case[][] tab, int hauteur, int largeur) {
+	public void continent(Case[][] tab, int hauteur, int largeur) {
 		for(int h = 0; h < hauteur; h++){
 			for(int l = 0; l < largeur; l++){
 				tab[h][l] = new Case(20);
@@ -129,7 +129,12 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		}
 	}
 
-
+	/**
+	 * Transforme le monde passé en paramètre en un environnement marécageux
+	 * @param tab
+	 * @param hauteur
+	 * @param largeur
+	 */
 	public void swamp(Case[][] tab, int hauteur , int largeur, boolean eau){
 		if(eau){
 			for(int h = 0; h < hauteur; h++){
@@ -155,7 +160,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 			for (int h = 0; h < monde[0].length; h++) {
 				if(monde[h][l].getType() == "terre"){
 					try{
-					//CrÃ©er des carrÃ©s de terre autour, sauf si on dÃ©passe le tableau
+					//Creer des carres de terre autour, sauf si on depasse le tableau
 					//Layer 1
 					newMonde[h-4][l].setType("terre");
 					
@@ -231,34 +236,46 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		newMonde[13][2].setType("terre");
 	}
 	
-	private void miseAJour() {
-		for (int l = 0; l < monde.length; l++) {
-			for (int h = 0; h < monde[0].length; h++) {
-				int terre = 0;
-				int eau = 0;
-				for(int caseX = -2; caseX<2; caseX++){
-					for(int caseY = -2; caseY<2; caseY++){
-						try{
-							if(newMonde[h-caseY][l-caseX].getType() == "terre"){
-								terre++;
-							}else{
-								eau++;
-							}
-						}catch(Exception e){
+	/**
+	 * Permet de fluidifier les paysage un nombre (nb) de fois, 
+	 * en adoucissant les bord et en fusionnant les îles côte à côte
+	 * 
+	 * @param nb
+	 */
+	private void miseAJour(int nb) {
+		for(int i = 0; i < nb; i++){
+			for (int l = 0; l < monde.length; l++) {
+				for (int h = 0; h < monde[0].length; h++) {
+					int terre = 0;
+					int eau = 0;
+					for(int caseX = -2; caseX<2; caseX++){
+						for(int caseY = -2; caseY<2; caseY++){
+							try{
+								if(newMonde[h-caseY][l-caseX].getType() == "terre"){
+									terre++;
+								}else{
+									eau++;
+								}
+							}catch(Exception e){
 							
+							}
 						}
 					}
-				}
-				Random r = new Random();
-				if(terre>eau){
-					newMonde[h][l].setType("terre");
-				}else{
-					newMonde[h][l].setType("eau");
+					Random r = new Random();
+					if(terre>eau){
+						newMonde[h][l].setType("terre");
+					}else{
+						newMonde[h][l].setType("eau");
+					}
 				}
 			}
 		}
 	}
 	
+	/**
+	 * Parcourt la map à la recherche d'un bout de terre vide, puis spawn un PNJ dessus
+	 * @param pnj
+	 */
 	public void spawnPNJ(PNJ pnj){
 		
 		/*
@@ -299,6 +316,9 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		
 	}
 	
+	/**
+	 *	Dessine le monde et l'interface de droite
+	 */
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
 		
@@ -350,29 +370,22 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		repaint();
 
 	}
-	
-	public static void main(String[] args){
 
-		Monde m = new Monde("continent");
-		JFrame f = new JFrame("Monde");
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.getContentPane().add(m);
-		f.pack();
-		f.setVisible(true);
-		
-		m.spawnPNJ(new PNJ());
-		m.spawnPNJ(new PNJ());
-		m.spawnPNJ(new PNJ());
-		
-		f.repaint();
-		
-		System.out.println(m.getListePNJ());
-	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public List getListePNJ() {
 		return listePNJ;
 	}
 	
+	/**
+	 * 
+	 * @param m
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public Case getCase(Case[][] m, int x, int y){
 		return m[y][x];
 	}
@@ -382,12 +395,20 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		
 	}
 
+	/**
+	 * Capte la position de la souris à son emplacement actuel et vide la mémoire de l'évènement
+	 */
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		mx = e.getX();
 		my = e.getY();
+		
+		e.consume();
 	}
 
+	/**
+	 * Change la vitesse de déroulement du jeu si l'on appuie sur les bouton + ou -
+	 */
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getActionCommand().toString() == "+" && multiplicateur > 0.125){

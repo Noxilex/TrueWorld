@@ -27,17 +27,10 @@ public class PNJ extends Personnage{
 		char[] nom = new char[tailleNom];
 		
 		/*
-		 * G�n�re tailleNom nombre de lettres pour le nom
+		 * Genere tailleNom nombre de lettres pour le nom
 		 */
 		for(int i = 0; i < tailleNom; i++){
 			
-			/*
-			 * Si alea == 0, on choisit une voyelle, sinon une consonne
-			 * 
-			 * *Idée* Générer de nouvelles lettres en fonction des lettres précédentes.
-			 * Si une consonnes avant: générer une voyelle 70%, consonnes 30%
-			 * *FinIdee*  
-			 */
 			if(i == 0 || i == 1){
 				nom[i] = generationLettre(1); //50%
 			}
