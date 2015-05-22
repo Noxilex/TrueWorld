@@ -62,8 +62,8 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		lowerVitesse = new JButton("-");
 		riseVitesse = new JButton("+");
 		
-		lowerVitesse.setBounds(largeur*taille+10, 220, 50, 30);
-		riseVitesse.setBounds(largeur*taille+70, 220, 50, 30);
+		lowerVitesse.setBounds(largeur*taille+10, 320, 50, 30);
+		riseVitesse.setBounds(largeur*taille+70, 320, 50, 30);
 		
 		lowerVitesse.addActionListener(this);
 		riseVitesse.addActionListener(this);
@@ -321,6 +321,8 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	 */
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
+		Font f = new Font("Dialog", Font.CENTER_BASELINE, 12);
+		g.setFont(f);
 		
 		//Interface de droite
 		g.setColor(Color.WHITE);
@@ -328,15 +330,29 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		g.setColor(Color.BLACK);
 		g.drawRect(largeur*taille, 0, this.getWidth()-largeur*taille, this.getHeight());
 		
-		Font f = new Font("Dialog", Font.CENTER_BASELINE, 12);
-		g.setFont(f);
+		//Boite 1
+		g.setColor(Color.BLACK);
+		g.drawRect(largeur*taille, 0, this.getWidth()-largeur*taille, this.getHeight()/5);
 		
-		g.drawString("Date:",largeur*taille+10, 20);
-		g.drawString(Main.date, largeur*taille+10, 40);
-		g.drawString("Nom du personnage:",largeur*taille+10, 100);
-		g.drawString("Vitesse actuelle:",largeur*taille+10, 180);
-		g.drawString("x"+1/multiplicateur,largeur*taille+10, 200);
+		g.drawString("Date:",largeur*taille+10, 40);
+		g.drawString(Main.date, largeur*taille+10, 80);
+		
+		//Boite 2
+		g.setColor(Color.BLACK);
+		g.drawRect(largeur*taille, this.getHeight()/5, this.getWidth()-largeur*taille, this.getHeight()/5);
+		
+		g.drawString("Nom du personnage:",largeur*taille+10, this.getHeight()/5+40);
 
+		//Boite 3
+		g.setColor(Color.BLACK);
+		g.drawRect(largeur*taille, this.getHeight()/5*2, this.getWidth()-largeur*taille, this.getHeight()/5);
+		
+		g.drawString("Vitesse actuelle:",largeur*taille+10, this.getHeight()/5*2+40);
+		g.drawString("x"+1/multiplicateur,largeur*taille+10, this.getHeight()/5*2+60);
+
+		//Boite 4
+		g.setColor(Color.BLACK);
+		g.drawRect(largeur*taille, this.getHeight()/5*3, this.getWidth()-largeur*taille, this.getHeight()/5);
 		
 		Rectangle souris = new Rectangle(mx, my, 1, 1);
 		for (int h = 0; h < newMonde.length; h++) {
@@ -347,8 +363,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 				if(newMonde[h][l].isPersonnage()){
 					if(souris.intersects(r)){
 	            		g.setColor(Color.BLACK);
-	            		g.drawString("Nom du personnage:",largeur*taille+10, 100);
-	            		g.drawString(newMonde[h][l].getPerso().toString(),largeur*taille+10, 120);
+	            		g.drawString(newMonde[h][l].getPerso().toString(),largeur*taille+10, this.getHeight()/5+80);
 	    				g.setColor(Color.GRAY);
 	                	g.fillRect(cH, cL, taille, taille);
 					}else{
@@ -358,10 +373,10 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 				}
 				else{
 					if(newMonde[h][l].isTerre()){
-						g.setColor(Color.GREEN);
+						g.setColor(new Color(163, 209, 25));
 						g.fillRect(cH,cL,taille,taille);
 					} else if(newMonde[h][l].isEau()){
-						g.setColor(Color.BLUE);
+						g.setColor(new Color(0, 102, 204));
 						g.fillRect(cH,cL,taille,taille);
 					}
 				}

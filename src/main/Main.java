@@ -15,6 +15,7 @@ public class Main {
 		JFrame f = new JFrame("Monde");
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setResizable(false);
 		f.getContentPane().add(m);
 		f.pack();
 		f.setLocationRelativeTo(null);
