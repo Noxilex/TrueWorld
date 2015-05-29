@@ -22,7 +22,7 @@ public class Case extends Rectangle{
 	String typeCase;
 	
 	/**
-	 * Génère un bloc de terre ou d'eau avec une probabilité rand/10000
+	 * Gï¿½nï¿½re un bloc de terre ou d'eau avec une probabilitï¿½ rand/10000
 	 * @param rand
 	 */
 	public Case(int rand){
@@ -73,6 +73,18 @@ public class Case extends Rectangle{
 	 */
 	public boolean isTerre(){
 		if(typeCase == "terre")
+			return true;
+		return false;
+	}
+	
+	public boolean isForet(){
+		if(typeCase == "foret")
+			return true;
+		return false;
+	}
+	
+	public boolean isSable(){
+		if(typeCase == "sable")
 			return true;
 		return false;
 	}

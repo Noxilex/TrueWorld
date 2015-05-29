@@ -21,7 +21,7 @@ import monde.Case;
 import personnages.PNJ;
 
 /**
- * Crée un Panel qui remplit l'ensemble de la frame et affiche le monde ainsi que son interface
+ * Crï¿½e un Panel qui remplit l'ensemble de la frame et affiche le monde ainsi que son interface
  * @author Noxilex
  *
  */
@@ -39,7 +39,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	List<Rectangle> hover;
 
 	Case[][] newMonde;
-	//mondeTmp qui sert à la fonction continent pour générer les nouveaux volcans autour des premiers
+	//mondeTmp qui sert ï¿½ la fonction continent pour gï¿½nï¿½rer les nouveaux volcans autour des premiers
 	Case[][] mondeTmp;
 	Case[][] monde;
 	JPanel map;
@@ -48,7 +48,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	JButton lowerVitesse;
 	
 	/**
-	 * Génère un monde de type continent ou swamp en fonction du type passé en paramètre 
+	 * Gï¿½nï¿½re un monde de type continent ou swamp en fonction du type passï¿½ en paramï¿½tre 
 	 * @param type
 	 */
 	public Monde(String type){
@@ -71,12 +71,13 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		this.add(lowerVitesse);
 		this.add(riseVitesse);
 		
-
-		//Génération d'un monde plein d'eau (vide)
+		System.out.println("CrÃ©ation d'une terre recouverte d'eau...");
+		//Gï¿½nï¿½ration d'un monde plein d'eau (vide)
 		newMonde = new Case[hauteur][largeur];
 			swamp(newMonde, hauteur, largeur, true);	
 		
-		//Génération des volcans
+		System.out.println("Erruption des volcans...");
+		//Gï¿½nï¿½ration des volcans
 		monde = new Case[hauteur][largeur];
 		if(this.type == "swamp"){
 			swamp(monde, hauteur, largeur, false);
@@ -94,13 +95,22 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 
 		
 		//Adoucissement du paysage
+		System.out.println("Adoucissement du paysage...");
 		miseAJour(4);
+		
+		//Mise en place des arbres
+		System.out.println("Plantage des arbres...");
+		forrestation(newMonde);
+		
+		//Ensablement de la plage
+		System.out.println("Ensablement de la plage...");
+		desertification(newMonde);
 		
 		setPreferredSize(new Dimension(taille*hauteur+150, taille*largeur));
 	}
 	
 	/**
-	 * Transforme le monde passé en paramètre en un continent
+	 * Transforme le monde passï¿½ en paramï¿½tre en un continent
 	 * @param tab
 	 * @param hauteur
 	 * @param largeur
@@ -130,7 +140,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	}
 
 	/**
-	 * Transforme le monde passé en paramètre en un environnement marécageux
+	 * Transforme le monde passï¿½ en paramï¿½tre en un environnement marï¿½cageux
 	 * @param tab
 	 * @param hauteur
 	 * @param largeur
@@ -151,7 +161,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		}
 	}
 	/**
-	 * Transforme le monde d'origine en un nouveau monde où les volcan sont déjà rentrés en erruption
+	 * Transforme le monde d'origine en un nouveau monde oï¿½ les volcan sont dï¿½jï¿½ rentrï¿½s en erruption
 	 * @param monde
 	 * @param newMonde
 	 */
@@ -159,86 +169,90 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		for (int l = 0; l < monde.length; l++) {
 			for (int h = 0; h < monde[0].length; h++) {
 				if(monde[h][l].getType() == "terre"){
-					try{
-					//Creer des carres de terre autour, sauf si on depasse le tableau
-					//Layer 1
-					newMonde[h-4][l].setType("terre");
 					
-					//Layer 2
-					newMonde[h-3][l-1].setType("terre");
-					newMonde[h-3][l].setType("terre");
-					newMonde[h-3][l+1].setType("terre");
 					
-					//Layer 3
-					newMonde[h-2][l-2].setType("terre");
-					newMonde[h-2][l-1].setType("terre");
-					newMonde[h-2][l].setType("terre");
-					newMonde[h-2][l+1].setType("terre");
-					newMonde[h-2][l+2].setType("terre");
 					
-					//Layer 4
-					newMonde[h-1][l-3].setType("terre");
-					newMonde[h-1][l-2].setType("terre");
-					newMonde[h-1][l-1].setType("terre");
-					newMonde[h-1][l].setType("terre");
-					newMonde[h-1][l+1].setType("terre");
-					newMonde[h-1][l+2].setType("terre");
-					newMonde[h-1][l+3].setType("terre");
-					
-					//Layer 5
-					newMonde[h][l-4].setType("terre");
-					newMonde[h][l-3].setType("terre");
-					newMonde[h][l-2].setType("terre");
-					newMonde[h][l-1].setType("terre");
-					newMonde[h][l].setType("terre");
-					newMonde[h][l+1].setType("terre");
-					newMonde[h][l+2].setType("terre");
-					newMonde[h][l+3].setType("terre");
-					newMonde[h][l+4].setType("terre");
-					
-					//Layer 6
-					newMonde[h+1][l-3].setType("terre");
-					newMonde[h+1][l-2].setType("terre");
-					newMonde[h+1][l-1].setType("terre");
-					newMonde[h+1][l].setType("terre");
-					newMonde[h+1][l+1].setType("terre");
-					newMonde[h+1][l+2].setType("terre");
-					newMonde[h+1][l+3].setType("terre");
-					
-					//Layer 7
-					newMonde[h+2][l-2].setType("terre");
-					newMonde[h+2][l-1].setType("terre");
-					newMonde[h+2][l].setType("terre");
-					newMonde[h+2][l+1].setType("terre");
-					newMonde[h+2][l+2].setType("terre");
-					
-					//Layer 8
-					newMonde[h+3][l-1].setType("terre");
-					newMonde[h+3][l].setType("terre");
-					newMonde[h+3][l+1].setType("terre");
-					
-					//Layer 9
-					newMonde[h+4][l].setType("terre");
-					
-					}catch(Exception e){
+					for(int i = -4; i <= 4; i++){
+						for(int j = -4; j <= 4; j++){
+							try{
+								newMonde[h+i][l+j].setType("terre");
+							} catch(Exception e){
+							}
+						}
 					}
+					
 
 				}
 			}
 		}
+		//Debug
 		//newMonde[abscisse][ordonnee]
 		//Dessin de bite
-		newMonde[10][1].setType("terre");
+		/*newMonde[10][1].setType("terre");
 		newMonde[11][1].setType("terre");
 		newMonde[12][1].setType("terre");
 		newMonde[13][1].setType("terre");
 		newMonde[13][0].setType("terre");
-		newMonde[13][2].setType("terre");
+		newMonde[13][2].setType("terre");*/
+	}
+	
+	public void desertification(Case[][] newMonde){
+		Case[][] mondeTmp = newMonde;
+		for (int l = 0; l < mondeTmp.length; l++) {
+			for (int h = 0; h < mondeTmp[0].length; h++) {
+				int terre = 0;
+				int eau = 0;
+				for(int caseX = -2; caseX<=2; caseX++){
+					for(int caseY = -2; caseY<=2; caseY++){
+
+						try{
+							if(mondeTmp[h-caseY][l-caseX].getType() != "eau"){
+								terre++;
+							}else{
+								eau++;
+							}
+						}catch(Exception e){
+						
+						}
+					}
+				}
+				if(eau > 0 && mondeTmp[h][l].isTerre()){
+					newMonde[h][l].setType("sable");
+				}
+			}
+		}
+	}
+	
+	public void forrestation(Case[][] newMonde){
+		Case[][] mondeTmp = newMonde;
+		for (int l = 0; l < mondeTmp.length; l++) {
+			for (int h = 0; h < mondeTmp[0].length; h++) {
+				int terre = 0;
+				int eau = 0;
+				for(int caseX = -5; caseX<=5; caseX++){
+					for(int caseY = -5; caseY<=5; caseY++){
+
+						try{
+							if(mondeTmp[h-caseY][l-caseX].getType() != "eau"){
+								terre++;
+							}else{
+								eau++;
+							}
+						}catch(Exception e){
+						
+						}
+					}
+				}
+				if(eau == 0){
+					newMonde[h][l].setType("foret");
+				}
+			}
+		}
 	}
 	
 	/**
 	 * Permet de fluidifier les paysage un nombre (nb) de fois, 
-	 * en adoucissant les bord et en fusionnant les îles côte à côte
+	 * en adoucissant les bord et en fusionnant les ï¿½les cï¿½te ï¿½ cï¿½te
 	 * 
 	 * @param nb
 	 */
@@ -248,8 +262,8 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 				for (int h = 0; h < monde[0].length; h++) {
 					int terre = 0;
 					int eau = 0;
-					for(int caseX = -2; caseX<2; caseX++){
-						for(int caseY = -2; caseY<2; caseY++){
+					for(int caseX = -2; caseX<=2; caseX++){
+						for(int caseY = -2; caseY<=2; caseY++){
 							try{
 								if(newMonde[h-caseY][l-caseX].getType() == "terre"){
 									terre++;
@@ -261,7 +275,6 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 							}
 						}
 					}
-					Random r = new Random();
 					if(terre>eau){
 						newMonde[h][l].setType("terre");
 					}else{
@@ -273,7 +286,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	}
 	
 	/**
-	 * Parcourt la map à la recherche d'un bout de terre vide, puis spawn un PNJ dessus
+	 * Parcourt la map ï¿½ la recherche d'un bout de terre vide, puis spawn un PNJ dessus
 	 * @param pnj
 	 */
 	public void spawnPNJ(PNJ pnj){
@@ -286,13 +299,13 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		 *	Probleme, on ne veut pas plusieurs PNJ
 		 *
 		 *	Sol1: Compter le nombre de cases vertes et
-		 *	Générer un nombre aléa qui compte le nombre de cases restantes avant le spawn
+		 *	Gï¿½nï¿½rer un nombre alï¿½a qui compte le nombre de cases restantes avant le spawn
 		 *
 		 */
 		int caseVerte = 0;
 		for (int h = 0; h < newMonde.length; h++) {
 			for (int l = 0; l < newMonde[0].length; l++) {
-				if(newMonde[h][l].isTerre() && !newMonde[h][l].isPersonnage()){
+				if((newMonde[h][l].isTerre() || newMonde[h][l].isSable()) && !newMonde[h][l].isPersonnage()){
 					caseVerte++;
 				}
 			}
@@ -303,7 +316,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 		while(caseVerte > 0){
 			for (int h = 0; h < newMonde.length; h++) {
 				for (int l = 0; l < newMonde[0].length; l++) {
-					if(newMonde[h][l].isTerre() && !newMonde[h][l].isPersonnage()){
+					if((newMonde[h][l].isTerre() || newMonde[h][l].isSable()) && !newMonde[h][l].isPersonnage()){
 						if(alea == caseVerte){
 							newMonde[h][l].setPerso(pnj);
 							listePNJ.add(pnj);
@@ -378,6 +391,12 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 					} else if(newMonde[h][l].isEau()){
 						g.setColor(new Color(0, 102, 204));
 						g.fillRect(cH,cL,taille,taille);
+					} else if(newMonde[h][l].isForet()){
+						g.setColor(new Color(0,128,0));
+						g.fillRect(cH, cL, taille, taille);
+					} else if(newMonde[h][l].isSable()){
+						g.setColor(new Color(255,247,221));
+						g.fillRect(cH, cL, taille, taille);
 					}
 				}
 			}
@@ -411,7 +430,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	}
 
 	/**
-	 * Capte la position de la souris à son emplacement actuel et vide la mémoire de l'évènement
+	 * Capte la position de la souris ï¿½ son emplacement actuel et vide la mï¿½moire de l'ï¿½vï¿½nement
 	 */
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -422,7 +441,7 @@ public class Monde extends JPanel implements MouseMotionListener, ActionListener
 	}
 
 	/**
-	 * Change la vitesse de déroulement du jeu si l'on appuie sur les bouton + ou -
+	 * Change la vitesse de dï¿½roulement du jeu si l'on appuie sur les bouton + ou -
 	 */
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
