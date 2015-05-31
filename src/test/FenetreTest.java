@@ -25,6 +25,8 @@ public class FenetreTest extends JPanel implements KeyListener{
 	private int imgActuelle = 2;
 	private int scale = 3;
 	
+	private int keyDisabled;
+	
 	private BufferedImage herbe;
 	private BufferedImage rock;
 	
@@ -185,33 +187,35 @@ public class FenetreTest extends JPanel implements KeyListener{
 			if(KeyEvent.VK_RIGHT == key){
 				c.setX(c.getX()+vitesseDeDeplacement);
 			}
-			if(KeyEvent.VK_LEFT == key){
+			else if(KeyEvent.VK_LEFT == key){
 				c.setX(c.getX()-vitesseDeDeplacement);
 			}
-			if(KeyEvent.VK_UP == key){
+			else if(KeyEvent.VK_UP == key){
 				c.setY(c.getY()-vitesseDeDeplacement);
 			}
-			if(KeyEvent.VK_DOWN == key){
+			else if(KeyEvent.VK_DOWN == key){
 				c.setY(c.getY()+vitesseDeDeplacement);
 			}
 
 			lastEvent = key;
+			keyDisabled = key;
 		}
 		
 		//Autrement on le fait revenir à sa position initiale
-		if((r1.intersects(personnage) || r2.intersects(personnage))){
-			if(KeyEvent.VK_RIGHT == lastEvent){
-				c.setX(c.getX()-vitesseDeDeplacement);
-			}
-			if(KeyEvent.VK_LEFT == lastEvent){
+		else {
+			if(KeyEvent.VK_RIGHT == key && KeyEvent.VK_RIGHT != keyDisabled){
 				c.setX(c.getX()+vitesseDeDeplacement);
 			}
-			if(KeyEvent.VK_UP == lastEvent){
-				c.setY(c.getY()+vitesseDeDeplacement);
+			else if(KeyEvent.VK_LEFT == key && KeyEvent.VK_LEFT != keyDisabled){
+				c.setX(c.getX()-vitesseDeDeplacement);
 			}
-			if(KeyEvent.VK_DOWN == lastEvent){
+			else if(KeyEvent.VK_UP == key && KeyEvent.VK_UP != keyDisabled){
 				c.setY(c.getY()-vitesseDeDeplacement);
 			}
+			else if(KeyEvent.VK_DOWN == key && KeyEvent.VK_DOWN != keyDisabled){
+				c.setY(c.getY()+vitesseDeDeplacement);
+			}
+			lastEvent = key;
 		}
 
 		//Permet de faire bouger l'animation des jambes seulement tous les 3 mouvements
@@ -223,6 +227,7 @@ public class FenetreTest extends JPanel implements KeyListener{
 				imgActuelle = 1;
 			
 		}
+		System.out.println(imgActuelle);
 		cpt++;
 		cpt = cpt%5+1;
 		this.repaint();
