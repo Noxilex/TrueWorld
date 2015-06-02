@@ -2,6 +2,7 @@ package test;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -24,6 +25,10 @@ public class FenetreTest extends JPanel implements KeyListener{
 	private Hero hero;
 	private int imgActuelle = 2;
 	private int scale = 3;
+	private boolean up_down;
+	private boolean down_down;
+	private boolean right_down;
+	private boolean left_down;
 	
 	private int keyDisabled;
 	
@@ -61,7 +66,7 @@ public class FenetreTest extends JPanel implements KeyListener{
 		
 		File f = null;
 		try {
-			f = new File("img/herbe.png");
+			f = new File("img/herbe.jpg");
 			herbe = ImageIO.read(f); 
 			f = new File("img/rock.png");
 			rock = ImageIO.read(f); 
@@ -114,18 +119,24 @@ public class FenetreTest extends JPanel implements KeyListener{
 		
 		r1 = new Rectangle(125, 125, 50, 50);
 		r2 = new Rectangle(225, 225, 50, 50);
+		//Polygon p = new Polygon(new int[]{300,310,320,320,310,300,300}, new int[]{100,90,100,110,120,110,100}, 6);
+		
+		
 		
 		personnage = new Rectangle(c.getX()+15+scale, c.getY()+(24*scale)+10, (15+scale)*2, 14);
 		
 		g.setColor(Color.WHITE);
 		g.drawImage(herbe, 0, 0, largeur, hauteur, null, null);
 		
+		//g.setColor(Color.BLACK);
+		//g.drawPolygon(p);
+		
 		g.setColor(Color.BLACK);
-		g.fillRect(125, 125, 50, 50);
+		g.drawRect(125, 125, 50, 50);
 		g.drawImage(rock, 100, 100, 100, 100, null, null);
-		g.fillRect(225, 225, 50, 50);
+		g.drawRect(225, 225, 50, 50);
 		g.drawImage(rock, 200, 200, 100, 100, null, null);
-		g.fillRect(c.getX()+15+scale, c.getY()+(24*scale)+10, (15+scale)*2, 14);
+		g.drawRect(c.getX()+15+scale, c.getY()+(24*scale)+10, (15+scale)*2, 14);
 		
 		if(lastEvent == KeyEvent.VK_DOWN){
 			if(imgActuelle == 2 || imgActuelle == 4)
@@ -182,8 +193,35 @@ public class FenetreTest extends JPanel implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
+		if(KeyEvent.VK_RIGHT == key){
+			right_down = true;
+		}
+		else if(KeyEvent.VK_LEFT == key){
+			left_down = true;
+		}
+		else if(KeyEvent.VK_UP == key){
+			up_down = true;
+		}
+		else if(KeyEvent.VK_DOWN == key){
+			down_down = true;
+		}
+		
 		//Tant que le personnage ne touche pas d'objet, il bouge. 
 		if(!(r1.intersects(personnage) || r2.intersects(personnage))){
+			
+			if(down_down){
+				c.setY(c.getY()+vitesseDeDeplacement);
+			}
+			if(up_down){
+				c.setY(c.getY()-vitesseDeDeplacement);
+			}
+			if(right_down){
+				c.setX(c.getX()+vitesseDeDeplacement);
+			}
+			if(left_down){
+				c.setX(c.getX()-vitesseDeDeplacement);
+			}
+			
 			if(KeyEvent.VK_RIGHT == key){
 				c.setX(c.getX()+vitesseDeDeplacement);
 			}
@@ -201,8 +239,11 @@ public class FenetreTest extends JPanel implements KeyListener{
 			keyDisabled = key;
 		}
 		
-		//Autrement on le fait revenir à sa position initiale
+		//Autrement on désactive la touche qui a causé la collision et on autorise seulement l'utilisation des autres
+		//Probleme: Si l'on rentre en collision avec plusieurs objets, on peut passer au travers des objets suivants.
+		//On aura donc tout de meme besoin de faire revenir le personnage en arrière
 		else {
+
 			if(KeyEvent.VK_RIGHT == key && KeyEvent.VK_RIGHT != keyDisabled){
 				c.setX(c.getX()+vitesseDeDeplacement);
 			}
@@ -237,6 +278,20 @@ public class FenetreTest extends JPanel implements KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
+		
+		if(KeyEvent.VK_RIGHT == key){
+			right_down = false;
+		}
+		else if(KeyEvent.VK_LEFT == key){
+			left_down = false;
+		}
+		else if(KeyEvent.VK_UP == key){
+			up_down = false;
+		}
+		else if(KeyEvent.VK_DOWN == key){
+			down_down = false;
+		}
+		
 		if(KeyEvent.VK_LEFT == key){
 			lastEvent = 1;
 		}
