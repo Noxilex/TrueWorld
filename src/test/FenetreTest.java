@@ -66,7 +66,7 @@ public class FenetreTest extends JPanel implements KeyListener{
 		
 		File f = null;
 		try {
-			f = new File("img/herbe.jpg");
+			f = new File("img/herbe.png");
 			herbe = ImageIO.read(f); 
 			f = new File("img/rock.png");
 			rock = ImageIO.read(f); 
