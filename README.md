@@ -21,5 +21,6 @@ java TrueWorld.jar
 - [ ] NPCs movements
 - [ ] NPCs behavior with others (genetic algorithm)
 - [ ] NPCs construct buildings & other stuff
+- [ ] Different kinds of map generations (biomes...)
 
 Not done, but working.
